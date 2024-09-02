@@ -1,78 +1,91 @@
-Certainly! Here's a brief and focused README file for your GitHub repository:
+Here’s an updated documentation for your project, including design choices, task priorities, usage of RTOS features, PID control implementation, and instructions on how to run and test the project on Wokwi.
 
 ---
 
-# Smart Home Automation System
+# **Smart Home Automation System Documentation**
 
-## Overview
+## **Project Overview**
 
-The Smart Home Automation System integrates sensors and actuators to automate home functions using an RTOS (FreeRTOS) on an ESP32 or Arduino. This project features temperature and humidity monitoring, LED control, motion detection, and real-time information display on an LCD. It also includes PID control to regulate a stepper motor based on temperature readings.
+The Smart Home Automation System integrates multiple functionalities, including temperature monitoring, lighting control, motion detection, user interface management, motor control with PID, and system health monitoring. This project uses FreeRTOS to handle multiple concurrent tasks effectively.
 
-## Design Choices
+## **Design Choices and Task Priorities**
 
-### Tasks and Priorities
+### **1. Task Descriptions**
 
-1. **Temperature and Humidity Monitoring**: Reads data from a DHT22 sensor and manages the stepper motor based on temperature. (Priority 1)
-2. **LED Control**: Adjusts an LED based on light levels detected by an LDR sensor. (Priority 1)
-3. **Motion Detection and Buzzer Control**: Activates a buzzer when motion is detected by a PIR sensor. (Priority 1)
-4. **LCD Display**: Shows the current temperature on an I2C LCD. (Priority 1)
-5. **System Health Monitoring**: Logs system health and status messages. (Priority 1)
+- **`Task1: Temperature Monitoring`**
+  - **File:** `task1_temperature_monitoring.ino`
+  - **Function:** Monitors temperature and humidity using a DHT22 sensor. It reads the temperature and humidity every 2 seconds and prints the values to the Serial Monitor.
+  - **Priority:** 1 (Low)
 
-### RTOS Features
+- **`Task2: Lighting Control`**
+  - **File:** `task2_lighting_control.ino`
+  - **Function:** Controls an LED based on the light level detected by an LDR. The LED is turned on when the light level is low (i.e., it's dark) and turned off when the light level is high (i.e., it's bright).
+  - **Priority:** 1 (Low)
 
-- **Semaphores/Mutexes**: Used to protect shared resources such as sensor data, LCD updates, and motor control. This ensures that tasks do not interfere with each other when accessing shared resources.
-- **Task Notifications**: Managed through `vTaskDelay()` to schedule periodic task execution.
+- **`Task3: Motion Detection`**
+  - **File:** `task3_motion_detection.ino`
+  - **Function:** Monitors a PIR sensor to detect motion. If motion is detected, a buzzer is turned on to alert the user. Otherwise, the buzzer remains off.
+  - **Priority:** 2 (Medium)
 
-### PID Control
+- **`Task4: User Interface`**
+  - **File:** `task4_user_interface.ino`
+  - **Function:** Updates an LCD display with the current temperature read from the DHT22 sensor. This task runs every 2 seconds.
+  - **Priority:** 1 (Low)
 
-- **Proportional (Kp)**: Adjusts motor speed based on the difference between the desired and actual temperatures.
-- **Integral (Ki)**: Compensates for accumulated temperature errors over time.
-- **Derivative (Kd)**: Predicts future temperature errors based on the rate of change.
+- **`Task5: Motor Control with PID`**
+  - **File:** `task5_motor_control.ino`
+  - **Function:** Controls a stepper motor using PID control based on the temperature. The motor direction is adjusted based on the temperature, and the motor steps are adjusted accordingly.
+  - **Priority:** 1 (Low)
 
-## Instructions for Running and Testing
+- **`Task6: System Health Monitoring`**
+  - **File:** `task6_system_health.ino`
+  - **Function:** Periodically prints system health information to the Serial Monitor every 5 seconds.
+  - **Priority:** 3 (High)
 
-### Setup in Wokwi
+### **2. RTOS Features**
 
-1. **Create a Wokwi Project**:
-   - Visit [Wokwi](https://wokwi.com/) and start a new project with your selected board (ESP32 or Arduino).
+- **Semaphores/Mutexes:**
+  - **DHT Mutex (`dhtMutex`):** Ensures that only one task accesses the DHT sensor at a time to prevent data corruption.
+  - **LCD Mutex (`lcdMutex`):** Manages access to the LCD to avoid conflicts between tasks trying to update the display.
+  - **Motor Mutex (`motorMutex`):** Coordinates access to the stepper motor to ensure proper operation without conflicts.
 
-2. **Upload Code**:
-   - Create the following files in your Wokwi project:
-     - `main.cpp`
-     - `TaskTemperatureHumidity.cpp`
-     - `TaskLDR.cpp`
-     - `TaskPIR.cpp`
-     - `TaskLCD.cpp`
-     - `TaskSystemHealth.cpp`
-   - Copy and paste the provided code into the respective files.
+  Mutexes are used to protect shared resources and avoid race conditions, ensuring that critical sections of the code are accessed by only one task at a time.
 
-3. **Add Libraries**:
-   - Ensure that the necessary libraries (`DHT`, `LiquidCrystal_I2C`) are included in your Wokwi project.
+## **PID Control Implementation**
 
-4. **Compile and Upload**:
-   - Compile the code and upload it to the virtual board.
+The PID control is implemented in `Task5` to manage a stepper motor based on temperature readings:
+- **Proportional (P):** Reacts to the current error.
+- **Integral (I):** Accounts for past errors by summing them over time.
+- **Derivative (D):** Predicts future errors based on the rate of change.
 
-### Testing
+The PID constants (Kp, Ki, Kd) are used to adjust the control response. The motor's direction is set based on temperature thresholds, and the number of steps is adjusted according to the PID output.
 
-1. **Temperature and Humidity Monitoring**:
-   - Check the Serial Monitor to verify temperature and humidity readings.
+## **Instructions for Running and Testing in Wokwi**
 
-2. **LED Control**:
-   - Vary light conditions to ensure the LED responds correctly.
+1. **Access the Project:**
+   - Open your Wokwi project using the following link: [Wokwi Project](https://wokwi.com/projects/407931795033906177).
 
-3. **Motion Detection**:
-   - Simulate motion and verify that the buzzer activates.
+2. **Upload the Code:**
+   - Ensure that all `.ino` files are correctly included in your Wokwi project. The `main.ino` file should be the primary file that initializes and manages the tasks.
 
-4. **LCD Display**:
-   - Confirm that the LCD displays the current temperature and updates as expected.
+3. **Compile and Upload:**
+   - Use the Wokwi IDE to compile the code. Fix any issues reported during the compilation if necessary.
+   - Upload the code to the virtual Arduino board.
 
-5. **System Health**:
-   - Monitor the Serial Monitor for health messages to ensure all tasks are functioning correctly.
+4. **Monitor Outputs:**
+   - Open the Serial Monitor in Wokwi to view output from `Task1` (temperature and humidity readings) and `Task6` (system health information).
 
-## Contact
+5. **Test Functionalities:**
+   - **Temperature Monitoring:** Verify that temperature and humidity readings are correctly displayed on the Serial Monitor.
+   - **Lighting Control:** Test by changing light levels to observe the LED behavior.
+   - **Motion Detection:** Simulate motion to check if the buzzer responds appropriately.
+   - **User Interface:** Confirm that the LCD displays the correct temperature readings.
+   - **Motor Control:** Observe the stepper motor's behavior and ensure it adjusts based on temperature readings.
 
-For questions or feedback, please contact [Your Name] at [Your Email].
+6. **Debugging:**
+   - Use the Serial Monitor for debugging and to view outputs from various tasks.
+   - Adjust task priorities and PID constants if needed based on the observed behavior.
 
 ---
 
-Feel free to adjust the contact information and any other details as needed.
+Feel free to adjust the details based on any specific observations or additional functionality you might have in your implementation.
