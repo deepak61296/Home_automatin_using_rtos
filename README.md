@@ -1,4 +1,3 @@
-Here’s an updated documentation for your project, including design choices, task priorities, usage of RTOS features, PID control implementation, and instructions on how to run and test the project on Wokwi.
 
 ---
 
@@ -87,5 +86,3 @@ The PID constants (Kp, Ki, Kd) are used to adjust the control response. The moto
    - Adjust task priorities and PID constants if needed based on the observed behavior.
 
 ---
-
-Feel free to adjust the details based on any specific observations or additional functionality you might have in your implementation.
