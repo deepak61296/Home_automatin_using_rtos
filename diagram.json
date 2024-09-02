@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "author": "Uri Shaked",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "wokwi-esp32-devkit-v1", "id": "esp", "top": -52.9, "left": -14.6, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": -47.9,
+      "left": 118.36,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r2",
+      "top": 34.86,
+      "left": 113.3,
+      "rotate": 90,
+      "attrs": { "value": "470" }
+    },
+    {
+      "type": "wokwi-photoresistor-sensor",
+      "id": "ldr1",
+      "top": -198.4,
+      "left": -172,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-pir-motion-sensor",
+      "id": "pir1",
+      "top": -53.6,
+      "left": -170.58,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-buzzer",
+      "id": "bz2",
+      "top": -84,
+      "left": -257.4,
+      "attrs": { "volume": "0.1" }
+    },
+    {
+      "type": "wokwi-stepper-motor",
+      "id": "stepper1",
+      "top": 32.41,
+      "left": 442.03,
+      "attrs": { "size": "17" }
+    },
+    {
+      "type": "wokwi-a4988",
+      "id": "drv1",
+      "top": 235.4,
+      "left": 494.8,
+      "rotate": 270,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd1",
+      "top": -243.2,
+      "left": 466.4,
+      "attrs": { "pins": "i2c" }
+    },
+    { "type": "wokwi-dht22", "id": "dht1", "top": 170.7, "left": 150, "rotate": 180, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX0", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX0", "$serialMonitor:TX", "", [] ],
+    [ "led2:A", "r2:1", "green", [ "v0" ] ],
+    [ "r2:2", "esp:D4", "green", [ "h-0.82", "v41.5" ] ],
+    [ "led2:C", "esp:GND.1", "black", [ "v0" ] ],
+    [ "ldr1:VCC", "esp:3V3", "red", [ "h336", "v67.2" ] ],
+    [ "ldr1:GND", "esp:GND.1", "black", [ "h326.4", "v268.4", "h-19.2" ] ],
+    [ "esp:D14", "ldr1:DO", "green", [ "h-38.4", "v-191.9", "h76.8", "v-38.4" ] ],
+    [ "esp:D13", "pir1:OUT", "green", [ "h0" ] ],
+    [ "pir1:GND", "esp:GND.1", "black", [ "v-124.8", "h278.14", "v182.4" ] ],
+    [ "pir1:VCC", "esp:3V3", "red", [ "v105.6", "h259.2", "v28.8" ] ],
+    [ "bz2:2", "esp:D12", "green", [ "v0" ] ],
+    [ "bz2:1", "esp:GND.1", "green", [ "v201.6", "h393.6" ] ],
+    [ "drv1:2B", "stepper1:A-", "green", [ "v0" ] ],
+    [ "stepper1:A+", "drv1:2A", "green", [ "v0" ] ],
+    [ "stepper1:B+", "drv1:1A", "green", [ "v0" ] ],
+    [ "stepper1:B-", "drv1:1B", "green", [ "v0" ] ],
+    [ "drv1:RESET", "drv1:SLEEP", "green", [ "v0" ] ],
+    [ "esp:D26", "drv1:DIR", "green", [ "h470.4", "v307.1", "h96", "v-57.6", "h0" ] ],
+    [ "esp:D25", "drv1:STEP", "green", [ "h432", "v-38.4", "h230.4", "v326.4", "h-105.6" ] ],
+    [ "lcd1:GND", "esp:GND.1", "black", [ "h0" ] ],
+    [ "esp:3V3", "lcd1:VCC", "green", [ "v19.2", "h326.1", "v-336" ] ],
+    [ "esp:D22", "lcd1:SCL", "green", [ "h28.5", "v-96.3", "h326.4", "v-67.2", "h38.4" ] ],
+    [ "esp:D21", "lcd1:SDA", "green", [ "h38.1", "v-154", "h307.2", "v-38.4" ] ],
+    [ "dht1:GND", "esp:GND.1", "black", [ "v0" ] ],
+    [ "dht1:SDA", "esp:D15", "green", [ "v0" ] ],
+    [ "dht1:VCC", "esp:GND.1", "red", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
