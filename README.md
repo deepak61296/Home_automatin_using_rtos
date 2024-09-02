@@ -62,7 +62,7 @@ The PID constants (Kp, Ki, Kd) are used to adjust the control response. The moto
 ## **Instructions for Running and Testing in Wokwi**
 
 1. **Access the Project:**
-   - Open your Wokwi project using the following link: [Wokwi Project](https://wokwi.com/projects/407931795033906177).
+   - Open Wokwi project using the following link: [Wokwi Project](https://wokwi.com/projects/407931795033906177).
 
 2. **Upload the Code:**
    - Ensure that all `.ino` files are correctly included in your Wokwi project. The `main.ino` file should be the primary file that initializes and manages the tasks.
